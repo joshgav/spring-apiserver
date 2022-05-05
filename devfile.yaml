@@ -1,50 +1,54 @@
+# influenced by https://github.com/devfile/registry/blob/main/stacks/java-springboot/devfile.yaml
 schemaVersion: 2.1.0
 metadata:
   generateName: spring-apiserver-
 components:
   - name: tools
     container:
-      image: quay.io/devfile/universal-developer-image:ubi8-0e189d9
-      memoryLimit: 3Gi
+      image: quay.io/eclipse/che-java11-gradle:next
+      memoryLimit: 4Gi
+      mountSources: true
       endpoints:
-        - exposure: none
-          name: debug
-          protocol: tcp
-          targetPort: 5005
         - exposure: public
+          path: /widgets
           name: 8080-tcp
           protocol: http
           targetPort: 8080
       volumeMounts:
         - name: m2
           path: /home/user/.m2
+      env:
+        - name: DEBUG_PORT
+          value: "5858"
   - name: m2
     volume:
-      size: 1G
+      size: 3Gi
   - name: postgresdb
     container:
-      image: quay.io/eclipse/che--centos--postgresql-13-centos7:1-71b24684d64da46f960682cc4216222a7e4ed8b1a31dd5a865b3e71afdea20d2
-      memoryLimit: 300Mi
+      image: docker.io/library/postgres:latest
+      memoryLimit: 1Gi
       endpoints:
         - exposure: none
           name: db
           protocol: tcp
           targetPort: 5432
       env:
-        - name: POSTGRESQL_USER
+        - name: POSTGRES_USER
           value: apiserver
-        - name: POSTGRESQL_PASSWORD
+        - name: POSTGRES_PASSWORD
           value: apiserver
-        - name: POSTGRESQL_DATABASE
+        - name: POSTGRES_DB
           value: postgres
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
       volumeMounts:
         - name: pgsqldata
-          path: /var/lib/pgsql/data
+          path: /var/lib/postgresql/data
   - name: pgsqldata
     volume:
-      size: 256Mi
+      size: 1Gi
 commands:
-  - id: gradle-build
+  - id: build
     exec:
       component: tools
       workingDir: ${PROJECT_SOURCE}
@@ -52,11 +56,19 @@ commands:
       group:
         kind: build
         isDefault: true
-  - id: gradle-run
+  - id: run
     exec:
       component: tools
       workingDir: ${PROJECT_SOURCE}
       commandLine: ./gradlew bootRun
       group:
         kind: run
+        isDefault: true
+  - id: debug
+    exec:
+      component: tools
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: 'java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=${DEBUG_PORT},suspend=n -jar target/*.jar'
+      group:
+        kind: debug
         isDefault: true
