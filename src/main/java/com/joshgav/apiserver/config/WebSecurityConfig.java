@@ -22,7 +22,9 @@ public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http.authorizeRequests()
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and().logout().logoutSuccessUrl("/_logout");
+                // without .and.logout... root path is unprotected, see https://stackoverflow.com/a/63605220
         http.csrf().disable();
     }
 
