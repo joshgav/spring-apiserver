@@ -36,9 +36,14 @@ public class GreetingController {
         KeycloakSecurityContext context =
             (KeycloakSecurityContext) req.getAttribute(KeycloakSecurityContext.class.getName());
         IDToken idToken = context.getIdToken();
+
         String preferredUsername = idToken.getPreferredUsername();
+        String issuer = idToken.getIssuer();
+        String subject = idToken.getSubject();
        
-        String content = String.format("Hello %s!", preferredUsername);
+        String content = String.format("Hello %s!\nID token issued by: %s\nto subject: %s",
+            preferredUsername, issuer, subject);
+        
         return ResponseEntity.ok(content);
     }
 
