@@ -20,7 +20,7 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.IDToken;
 
 @RestController
-@RequestMapping("/greeting")
+@RequestMapping(value={"/greeting", "/"})
 public class GreetingController {
     private static final Logger logger = LoggerFactory.getLogger(GreetingController.class);
 
