@@ -14,6 +14,7 @@ import org.springframework.boot.actuate.endpoint.SecurityContext;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -24,7 +25,6 @@ import org.keycloak.representations.IDToken;
 public class GreetingController {
     private static final Logger logger = LoggerFactory.getLogger(GreetingController.class);
 
-
     @Operation(summary = "greet user", tags = {"profile"})
     @GetMapping(path="", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> greet(HttpServletRequest req) {
@@ -33,10 +33,9 @@ public class GreetingController {
         String spanId = Span.current().getSpanContext().getSpanId();
         logger.debug("traceId {}, spanId {}", traceId, spanId);
 
-        KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) req.getUserPrincipal();
-        KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
-        KeycloakSecurityContext session = principal.getKeycloakSecurityContext();
-        IDToken idToken = session.getIdToken();
+        KeycloakSecurityContext context =
+            (KeycloakSecurityContext) req.getAttribute(KeycloakSecurityContext.class.getName());
+        IDToken idToken = context.getIdToken();
         String preferredUsername = idToken.getPreferredUsername();
        
         String content = String.format("Hello %s!", preferredUsername);
