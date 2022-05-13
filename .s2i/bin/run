@@ -9,12 +9,25 @@ if [[ -v PG_uri ]]; then
                 \"username\": \"${PG_user}\",
                 \"password\": \"${PG_password}\",
                 \"url\": \"jdbc:postgresql://${PG_host}:${PG_port}/${PG_dbname}\"
-            }
-        },
-        \"keycloak\": {
-            ${KEYCLOAK_BASE_URL:+\"auth-server-url\": \"${KEYCLOAK_BASE_URL}\",}
-            \"credentials\": {
-                \"secret\": \"${KEYCLOAK_CLIENT_SECRET}\"
+            },
+            \"security\": {
+                \"oauth2\": {
+                    \"client\": {
+                        \"registration\": {
+                            \"oidc\": {
+                                \"provider\": \"keycloak\",
+                                \"scope\": \"openid\",
+                                \"client-secret\": \"${KEYCLOAK_CLIENT_SECRET}\",
+                                \"client-id\": \"${KEYCLOAK_CLIENT_ID}\"
+                            }
+                        },
+                        \"provider\": {
+                            \"keycloak\": {
+                                \"issuer-uri\": \"${KEYCLOAK_ISSUER_URI}\"
+                            }
+                        }
+                    }
+                }
             }
         }
     }"

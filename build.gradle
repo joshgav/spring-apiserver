@@ -41,11 +41,16 @@ dependencies {
     // Spring starters
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     // implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-client-all'
 
     implementation 'io.micrometer:micrometer-registry-prometheus'
     implementation 'io.opentelemetry:opentelemetry-api'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.security:spring-security-test'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.postgresql:postgresql'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
@@ -61,6 +66,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
 
     testImplementation "io.zonky.test:embedded-database-spring-test:${zonkyVersion}"
     testImplementation "io.zonky.test:embedded-postgres:${zonkyPostgresVersion}"

@@ -9,8 +9,21 @@ spring:
   datasource:
     initialization-mode: always
     username: apiserver
+    password: apiserver
     url: jdbc:postgresql://localhost:5432/postgres
     # url: jdbc:postgresql://localhost:5432/apiserverdb
+  security:
+    oauth2:
+      client:
+        registration:
+          oidc:
+            provider: keycloak
+            scope: openid
+            client-id: ${KEYCLOAK_CLIENT_ID}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_ISSUER_URL}
 
 server:
   servlet:
@@ -33,19 +46,3 @@ springdoc:
   api-docs.enabled: true
   swagger-ui.enabled: true
   packagesToScan: com.joshgav.apiserver.controller
-
-# keycloak:
-#   resource: spring-apiserver
-#   ssl-required: all
-#   realm: app
-#   principal-attribute: preferred_username
-#   auth-server-url: TBD
-#   credentials:
-#     secret: TBD
-# # security-constraints:
-# # - authRoles:
-# #   - spring
-# #   - user
-# #   securityCollections:
-# #   - patterns:
-# #     - '/*'
