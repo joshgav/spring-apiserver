@@ -1,11 +1,10 @@
-# influenced by https://github.com/devfile/registry/blob/main/stacks/java-springboot/devfile.yaml
 schemaVersion: 2.1.0
 metadata:
   generateName: spring-apiserver-
 components:
   - name: tools
     container:
-      image: quay.io/eclipse/che-java11-gradle:next
+      image: quay.io/devfile/universal-developer-image:ubi8-latest
       memoryLimit: 4Gi
       mountSources: true
       endpoints:
