@@ -1,6 +1,0 @@
-# get valid id's:
-#     `curl -sSL https://raw.githubusercontent.com/eclipse-che/che-plugin-registry/main/che-editors.yaml | yq '.editors[].metadata.name'`
-# id: che-incubator/che-idea/next
-# id: eclipse/che-theia/next
-# id: che-incubator/che-code/insiders
-# registryUrl: https://eclipse-che.github.io/che-plugin-registry/main/v3

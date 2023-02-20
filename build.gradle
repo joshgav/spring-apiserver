@@ -9,6 +9,11 @@ plugins {
 group 'com.joshgav'
 version '1.0.0-SNAPSHOT'
 
+java {
+    sourceCompatibility = 17
+    targetCompatibility = 17
+}
+
 repositories {
     maven {
         url "https://repo.spring.io/milestone"
@@ -30,32 +35,25 @@ dependencies {
     implementation platform("org.springframework.data:spring-data-bom:${springDataVersion}")
     implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
     implementation platform("com.fasterxml.jackson:jackson-bom:${jacksonVersion}")
+    implementation platform("io.micrometer:micrometer-bom:${micrometerVersion}")
     implementation platform("org.junit:junit-bom:${junitVersion}")
-    implementation platform("org.keycloak.bom:keycloak-adapter-bom:${keycloakVersion}")
 
-    // Sleuth, OpenTelemetry
-    implementation platform("org.springframework.cloud:spring-cloud-sleuth-otel-dependencies:${sleuthOtelVersion}")
-    implementation('org.springframework.cloud:spring-cloud-starter-sleuth') {
-        exclude group: 'org.springframework.cloud', module: 'spring-cloud-sleuth-brave'
-    }
-    implementation 'org.springframework.cloud:spring-cloud-sleuth-otel-autoconfigure'
-    implementation 'io.opentelemetry:opentelemetry-api'
-
-    // Starters
+    // Spring starters
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.keycloak:keycloak-spring-boot-starter'
+    // implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-client-all'
+
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'io.opentelemetry:opentelemetry-api'
     implementation 'org.postgresql:postgresql'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
     implementation 'org.slf4j:slf4j-api'
     implementation 'ch.qos.logback:logback-classic'
-    implementation "io.micrometer:micrometer-registry-prometheus:${micrometerVersion}"
 
     implementation "io.swagger.core.v3:swagger-annotations:${swaggerAnnotationsVersion}"
-    implementation "org.springdoc:springdoc-openapi-ui:${springdocVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
 
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

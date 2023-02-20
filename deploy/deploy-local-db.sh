@@ -5,7 +5,7 @@ export PATH=/usr/lib/postgresql/12/bin:${PATH}
 
 # helpful manual commands
 # stop server: `pg_ctl stop -D temp/pgsql/data`
-# connect to db: `PGPASSWORD=$(cat temp/pgsql/pwfile) psql -h localhost -p 5432 -U clue devicedb`
+# connect to db: `PGPASSWORD=$(cat temp/pgsql/pwfile) psql -h localhost -p 5432 -U apiserver postgres`
 
 # set up local server in repo-relative path
 pgsql_dir=${root_dir}/temp/pgsql

@@ -20,4 +20,9 @@ if [[ -v PG_uri ]]; then
     }"
 fi
 
-exec java $JAVA_PARAMS -jar ${HOME}/app.jar
+# echo "SPRING_APPLICATION_JSON:"
+# echo "${SPRING_APPLICATION_JSON}"
+
+exec java \
+    -Dspring.config.additional-location=optional:file:/opt/config/application.yaml \
+    -jar ./app.jar

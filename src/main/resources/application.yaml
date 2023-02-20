@@ -9,11 +9,8 @@ spring:
   datasource:
     initialization-mode: always
     username: apiserver
-    password: apiserver
-    url: jdbc:postgresql://localhost:5432/apiserverdb
-    # url: jdbc:postgresql://localhost:5432/postgres
-  sleuth:
-    enabled: true
+    url: jdbc:postgresql://localhost:5432/postgres
+    # url: jdbc:postgresql://localhost:5432/apiserverdb
 
 server:
   servlet:
@@ -37,18 +34,18 @@ springdoc:
   swagger-ui.enabled: true
   packagesToScan: com.joshgav.apiserver.controller
 
-keycloak:
-  resource: spring-apiserver
-  ssl-required: all
-  realm: app
-  principal-attribute: preferred_username
-  auth-server-url: TBD
-  credentials:
-    secret: TBD
-# security-constraints:
-# - authRoles:
-#   - spring
-#   - user
-#   securityCollections:
-#   - patterns:
-#     - '/*'
+# keycloak:
+#   resource: spring-apiserver
+#   ssl-required: all
+#   realm: app
+#   principal-attribute: preferred_username
+#   auth-server-url: TBD
+#   credentials:
+#     secret: TBD
+# # security-constraints:
+# # - authRoles:
+# #   - spring
+# #   - user
+# #   securityCollections:
+# #   - patterns:
+# #     - '/*'
