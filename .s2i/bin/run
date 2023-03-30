@@ -1,12 +1,12 @@
 #! /usr/bin/env bash
 
-if [[ -v PG_uri ]]; then
+if [[ -v PG_username ]]; then
     echo "INFO: Setting binding metadata from env vars"
 
     export SPRING_APPLICATION_JSON="{
         \"spring\": {
             \"datasource\": {
-                \"username\": \"${PG_user}\",
+                \"username\": \"${PG_username}\",
                 \"password\": \"${PG_password}\",
                 \"url\": \"jdbc:postgresql://${PG_host}:${PG_port}/${PG_dbname}\"
             }
@@ -20,8 +20,8 @@ if [[ -v PG_uri ]]; then
     }"
 fi
 
-# echo "SPRING_APPLICATION_JSON:"
-# echo "${SPRING_APPLICATION_JSON}"
+echo "SPRING_APPLICATION_JSON:"
+echo "${SPRING_APPLICATION_JSON}"
 
 exec java \
     -Dspring.config.additional-location=optional:file:/opt/config/application.yaml \
