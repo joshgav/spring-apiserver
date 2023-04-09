@@ -33,19 +33,3 @@ springdoc:
   api-docs.enabled: true
   swagger-ui.enabled: true
   packagesToScan: com.joshgav.apiserver.controller
-
-# keycloak:
-#   resource: spring-apiserver
-#   ssl-required: all
-#   realm: app
-#   principal-attribute: preferred_username
-#   auth-server-url: TBD
-#   credentials:
-#     secret: TBD
-# # security-constraints:
-# # - authRoles:
-# #   - spring
-# #   - user
-# #   securityCollections:
-# #   - patterns:
-# #     - '/*'

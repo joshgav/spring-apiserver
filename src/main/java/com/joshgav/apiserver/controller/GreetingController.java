@@ -34,16 +34,5 @@ public class GreetingController {
         page.append("Hello world!");
         
         return ResponseEntity.ok(page.toString());
-
-        // TODO: enable Keycloak SSO
-        // KeycloakSecurityContext context = (KeycloakSecurityContext) req.getAttribute(KeycloakSecurityContext.class.getName());
-        // IDToken idToken = context.getIdToken();
-
-        // String preferredUsername = idToken.getPreferredUsername();
-        // String issuer = idToken.getIssuer();
-        // String subject = idToken.getSubject();
-       
-        // String content = String.format("Hello %s!\nID token issued by: %s\nto subject: %s", preferredUsername, issuer, subject);
-        // return ResponseEntity.ok(content);
     }
 }
