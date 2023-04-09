@@ -10,12 +10,6 @@ if [[ -v PG_username ]]; then
                 \"password\": \"${PG_password}\",
                 \"url\": \"jdbc:postgresql://${PG_host}:${PG_port}/${PG_dbname}\"
             }
-        },
-        \"keycloak\": {
-            ${KEYCLOAK_BASE_URL:+\"auth-server-url\": \"${KEYCLOAK_BASE_URL}\",}
-            \"credentials\": {
-                \"secret\": \"${KEYCLOAK_CLIENT_SECRET}\"
-            }
         }
     }"
 fi
