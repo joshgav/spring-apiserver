@@ -6,6 +6,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -14,6 +15,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+          .oauth2Client(withDefaults())
           .securityMatchers((matchers) -> matchers
             .requestMatchers("/auth/**"))
           .authorizeRequests()
