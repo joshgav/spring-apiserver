@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: spring-apiserver-default-pipeline
+  name: spring-apiserver-pr-pipeline
   namespace: spring-apiserver
   annotations:
     pipelinesascode.tekton.dev/on-target-branch: "[main,tekton]"
