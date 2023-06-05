@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spring-apiserver
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: spring-apiserver
+  namespace: ${argocd_namespace}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: spring-apiserver
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: deploy/base
+    repoURL: https://github.com/joshgav/spring-apiserver.git
+    targetRevision: main
+    kustomize: {}
+  syncPolicy:
+    automated: {}

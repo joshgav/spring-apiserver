@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-apiserver
+  labels:
+    app: spring-apiserver
+    app.kubernetes.io/component: spring-apiserver
+    app.kubernetes.io/instance: spring-apiserver
+  annotations:
+    app.openshift.io/connects-to: >-
+      [{"apiVersion":"postgresql.cnpg.io/v1","kind":"Cluster","name":"apiserver-dbcluster"}]
+    app.openshift.io/vcs-uri: 'https://github.com/joshgav/spring-apiserver'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: spring-apiserver
+      app: spring-apiserver
+  template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "true"
+      labels:
+        app.kubernetes.io/component: spring-apiserver
+        app: spring-apiserver
+    spec:
+      containers:
+        - name: spring-apiserver
+          image: registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:latest
+          imagePullPolicy: Always
+          envFrom:
+            - prefix: PG_
+              secretRef:
+                name: apiserver-dbcluster-superuser
+          env:
+            - name: HOME
+              value: /opt/jboss
+            - name: PG_host
+              value: apiserver-dbcluster-rw
+            - name: PG_port
+              value: '5432'
+            - name: PG_dbname
+              value: postgres
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: web
+            - containerPort: 9090
+              protocol: TCP
+              name: actuator
+          livenessProbe:
+            httpGet:
+              path: "/actuator/health/liveness"
+              port: 9090
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: "/actuator/health/readiness"
+              port: 9090
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            failureThreshold: 10
+          volumeMounts:
+            - mountPath: /opt/config
+              name: app-properties
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+      volumes:
+        - name: app-properties
+          configMap:
+            name: spring-apiserver-app-properties
+            optional: true
