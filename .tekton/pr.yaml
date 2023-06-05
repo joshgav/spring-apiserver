@@ -1,4 +1,3 @@
-# see https://pipelinesascode.com/docs/guide/authoringprs/
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
@@ -10,25 +9,60 @@ metadata:
     pipelinesascode.tekton.dev/task: "[git-clone,buildah]"
     pipelinesascode.tekton.dev/max-keep-runs: "5"
   labels:
-    tekton.dev/pipeline: spring-boot-build-pipeline
-    type: pipeline
+    app: spring-apiserver
 spec:
   serviceAccountName: pipeline
-  pipelineRef:
-    name: spring-boot-build-pipeline
   params:
-    - name: source-repo
-      value: {{repo_url}}
-    - name: source-branch
-      value: {{source_branch}}
-    - name: output-image
-      value: registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:pr-{{pull_request_number}}
+  - name: source-repo
+    value: {{repo_url}}
+  - name: source-branch
+    value: {{source_branch}}
+  - name: output-image
+    value: registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:pr-{{pull_request_number}}
   workspaces:
+  - name: source-folder
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  pipelineSpec:
+    params:
+    - name: source-repo
+      description: source repo that contains the application code
+      type: string
+    - name: source-branch
+      description: source branch to build from
+      type: string
+    - name: output-image
+      description: reference of the image that will get created
+      type: string
+    tasks:
+    - name: git-clone
+      params:
+      - name: url
+        value: $(params.source-repo)
+      - name: revision
+        value: $(params.source-branch)
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+      - name: output
+        workspace: source-folder
+    - name: buildah
+      params:
+      - name: IMAGE
+        value: $(params.output-image)
+      runAfter:
+      - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+      - name: source
+        workspace: source-folder
+    workspaces:
     - name: source-folder
-      volumeClaimTemplate:
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1Gi
