@@ -1,0 +1,18 @@
+# see https://backstage.io/docs/features/software-catalog/descriptor-format/
+# and https://backstage.io/docs/features/software-catalog/well-known-annotations/
+# and https://backstage.io/docs/features/software-catalog/well-known-relations/
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: spring-apiserver
+  description: A basic API server in Spring.
+  annotations:
+    backstage.io/kubernetes-namespace: spring-apiserver
+    backstage.io/kubernetes-label-selector: app=spring-apiserver
+    backstage.io/techdocs-ref: dir:.
+    argocd/app-name: spring-apiserver
+    quay.io/repository-slug: joshgav/spring-apiserver
+spec:
+  type: service
+  owner: josh@joshgav.com
+  lifecycle: experimental
