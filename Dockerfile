@@ -1,15 +1,16 @@
-FROM docker.io/library/gradle:latest
+FROM registry.redhat.io/ubi9/openjdk-17:latest
 
 USER 0
 WORKDIR /app-root
 
-COPY gradle gradle
 COPY build.gradle gradle.properties gradlew settings.gradle ./
-COPY .s2i .s2i
+# TODO: copy if exists
+# COPY .gradle .gradle
+COPY gradle gradle
+
 COPY src src
+COPY scripts scripts
 
-RUN ./.s2i/bin/assemble
+RUN scripts/build.sh
 
-RUN cp .s2i/bin/run ./entrypoint.sh
-
-ENTRYPOINT ./entrypoint.sh
+ENTRYPOINT scripts/run.sh
