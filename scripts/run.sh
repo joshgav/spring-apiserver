@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+this_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+echo "INFO: pwd: ${this_dir}"
+
 if [[ -v PG_username ]]; then
     echo "INFO: Setting binding metadata from env vars"
 
@@ -19,4 +22,4 @@ echo "${SPRING_APPLICATION_JSON}"
 
 exec java \
     -Dspring.config.additional-location=optional:file:/opt/config/application.yaml \
-    -jar ./app.jar
+    -jar ${this_dir}/app.jar
