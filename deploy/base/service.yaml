@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-apiserver
+  labels:
+    app: spring-apiserver
+    app.kubernetes.io/component: spring-apiserver
+    app.kubernetes.io/instance: spring-apiserver
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/component: spring-apiserver
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: 9090-tcp
+      protocol: TCP
+      port: 9090
+      targetPort: 9090

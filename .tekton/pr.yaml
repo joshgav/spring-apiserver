@@ -1,0 +1,68 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: spring-apiserver-pr-pipeline
+  namespace: spring-apiserver
+  annotations:
+    pipelinesascode.tekton.dev/on-target-branch: "[main,tekton]"
+    pipelinesascode.tekton.dev/on-event: "pull_request"
+    pipelinesascode.tekton.dev/task: "[git-clone,buildah]"
+    pipelinesascode.tekton.dev/max-keep-runs: "5"
+  labels:
+    app: spring-apiserver
+spec:
+  serviceAccountName: pipeline
+  params:
+  - name: source-repo
+    value: {{repo_url}}
+  - name: source-branch
+    value: {{source_branch}}
+  - name: output-image
+    value: registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:pr-{{pull_request_number}}
+  workspaces:
+  - name: source-folder
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  pipelineSpec:
+    params:
+    - name: source-repo
+      description: source repo that contains the application code
+      type: string
+    - name: source-branch
+      description: source branch to build from
+      type: string
+    - name: output-image
+      description: reference of the image that will get created
+      type: string
+    tasks:
+    - name: clone-repo
+      params:
+      - name: url
+        value: $(params.source-repo)
+      - name: revision
+        value: $(params.source-branch)
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+      - name: output
+        workspace: source-folder
+    - name: build-image
+      params:
+      - name: IMAGE
+        value: $(params.output-image)
+      runAfter:
+      - clone-repo
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+      - name: source
+        workspace: source-folder
+    workspaces:
+    - name: source-folder

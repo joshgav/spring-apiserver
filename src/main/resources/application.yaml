@@ -5,9 +5,9 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   datasource:
-    initialization-mode: always
+    initialization-mode: never
     username: apiserver
     url: jdbc:postgresql://localhost:5432/postgres
     # url: jdbc:postgresql://localhost:5432/apiserverdb

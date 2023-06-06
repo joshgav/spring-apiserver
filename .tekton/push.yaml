@@ -1,0 +1,95 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: spring-apiserver-push-pipeline
+  namespace: spring-apiserver
+  annotations:
+    pipelinesascode.tekton.dev/on-target-branch: "[main,tekton]"
+    pipelinesascode.tekton.dev/on-event: "push"
+    pipelinesascode.tekton.dev/task: "[git-clone,buildah,openshift-client,argocd-task-sync-and-wait]"
+    pipelinesascode.tekton.dev/max-keep-runs: "5"
+  labels:
+    app: spring-apiserver
+spec:
+  serviceAccountName: pipeline
+  params:
+  - name: source-repo
+    value: {{repo_url}}
+  - name: source-branch
+    value: {{source_branch}}
+  - name: output-image
+    value: registry-quay-quay.apps.ipi.aws.joshgav.com/{{repo_owner}}/{{repo_name}}:latest
+  workspaces:
+  - name: source-folder
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  pipelineSpec:
+    params:
+    - name: source-repo
+      description: source repo that contains the application code
+      type: string
+    - name: source-branch
+      description: source branch to build from
+      type: string
+    - name: output-image
+      description: reference of the image that will get created
+      type: string
+    workspaces:
+    - name: source-folder
+    tasks:
+    - name: clone-repo
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      params:
+      - name: url
+        value: $(params.source-repo)
+      - name: revision
+        value: $(params.source-branch)
+      workspaces:
+      - name: output
+        workspace: source-folder
+    - name: build-image
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      runAfter:
+      - clone-repo
+      params:
+      - name: IMAGE
+        value: $(params.output-image)
+      workspaces:
+      - name: source
+        workspace: source-folder
+    ## TODO
+    ## - name: test-application
+    - name: configure-application
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
+      runAfter:
+      - build-image
+      workspaces:
+      - name: manifest-dir
+        workspace: source-folder
+      params:
+      - name: SCRIPT
+        value: |
+          oc apply -n openshift-gitops -f deploy/argocd-application.yaml
+          oc patch -n openshift-gitops application.argoproj.io {{repo_name}} --type merge -p '{"spec": {"source": {"targetRevision": "$(params.source-branch)"} } }'
+    - name: sync-application
+      taskRef:
+        kind: ClusterTask
+        name: argocd-task-sync-and-wait
+      runAfter:
+      - configure-application
+      params:
+      - name: application-name
+        value: {{repo_name}}
+      - name: revision
+        value: $(params.source-branch)
