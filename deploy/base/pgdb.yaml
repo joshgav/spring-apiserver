@@ -6,6 +6,6 @@ metadata:
     app.kubernetes.io/name: apiserver
     app.kubernetes.io/component: dbcluster
 spec:
-  instances: 1
+  instances: 2
   storage:
     size: 1Gi
