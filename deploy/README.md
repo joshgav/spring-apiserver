@@ -8,6 +8,8 @@ There are a few ways to set things up for now:
 
 For now the following configuration must be set up manually in the app's namespace (default: `spring-apiserver`).
 
+In addition you must create a Repository resource in the spring-apiserver namespace.
+
 ## ClusterRoleBinding
 
 - `pipeline` service account requires `applications.argoproj.io-v1alpha1-admin` cluster role
