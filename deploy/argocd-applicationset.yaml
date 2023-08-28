@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: spring-apiserver
+  namespace: openshift-gitops
+spec:
+  generators:
+  - clusterDecisionResource:
+      requeueAfterSeconds: 60
+      configMapRef: acm-placement
+      labelSelector:
+        matchLabels:
+          cluster.open-cluster-management.io/placement: all-openshift-clusters
+  template:
+    metadata:
+      name: spring-apiserver-{{name}}
+    spec:
+      project: default
+      source:
+        path: deploy/base
+        repoURL: https://github.com/joshgav/spring-apiserver.git
+        targetRevision: main
+      destination:
+        namespace: spring-apiserver
+        server: "{{server}}"
+      syncPolicy:
+        automated:
+          selfHeal: false
+        syncOptions:
+        - CreateNamespace=true

@@ -10,6 +10,8 @@ For now the following configuration must be set up manually in the app's namespa
 
 In addition you must create a Repository resource in the spring-apiserver namespace.
 
+You must also add `quay-pull-secret` to the `default` service account which will run the pod.
+
 ## ClusterRoleBinding
 
 - `pipeline` service account requires `applications.argoproj.io-v1alpha1-admin` cluster role
