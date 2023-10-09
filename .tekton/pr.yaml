@@ -18,7 +18,8 @@ spec:
   - name: source-branch
     value: {{source_branch}}
   - name: output-image
-    value: registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:pr-{{pull_request_number}}
+    # value: registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:pr-{{pull_request_number}}
+    value: quay.io/joshgav/spring-apiserver:pr-{{pull_request_number}}
   workspaces:
   - name: source-folder
     volumeClaimTemplate:

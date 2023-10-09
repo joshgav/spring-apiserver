@@ -18,7 +18,8 @@ spec:
   - name: source-branch
     value: {{source_branch}}
   - name: output-image
-    value: registry-quay-quay.apps.ipi.aws.joshgav.com/{{repo_owner}}/{{repo_name}}:latest
+    value: quay.io/{{repo_owner}}/{{repo_name}}:latest
+    # value: registry-quay-quay.apps.ipi.aws.joshgav.com/{{repo_owner}}/{{repo_name}}:latest
   workspaces:
   - name: source-folder
     volumeClaimTemplate:
