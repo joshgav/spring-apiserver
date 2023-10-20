@@ -7,12 +7,8 @@ if [[ -e "${this_dir}/.env" ]]; then source ${this_dir}/.env; fi
 source ${this_dir}/lib/kubernetes.sh
 
 argocd_namespace=openshift-gitops
-argocd_deployment=openshift-gitops-server
-
-kubectl get deployments -n ${argocd_namespace} ${argocd_deployment} &> /dev/null
-if [[ $? != 0 ]]; then
-    echo "ERROR: ArgoCD is not installed, cannot deploy Argo app"
-    exit 2
-fi
+app_namespace=spring-apiserver
+ensure_argocd ${argocd_namespace}
+ensure_namespace ${app_namespace}
 
 kubectl apply --namespace ${argocd_namespace} -f ${this_dir}/argocd-applicationset.yaml
