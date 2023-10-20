@@ -8,11 +8,16 @@ metadata:
   description: A basic API server in Spring.
   annotations:
     backstage.io/kubernetes-namespace: spring-apiserver
+    # this label also determines which Tekton pipeline runs are discovered 
     backstage.io/kubernetes-label-selector: app=spring-apiserver
     backstage.io/techdocs-ref: dir:.
     argocd/app-name: spring-apiserver
     quay.io/repository-slug: joshgav/spring-apiserver
     janus-idp.io/tekton-enabled: 'true'
+  links:
+    - url: https://blog.joshgav.com/
+      title: Josh's blog
+      icon: docs
 spec:
   type: service
   owner: josh@joshgav.com
