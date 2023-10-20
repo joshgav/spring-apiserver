@@ -1,10 +1,20 @@
 # Delivery configuration
 
-There are a few ways to set things up for now:
+## Usage
 
-- preferred: wire up Tekton Pipelines as Code and let it configure and sync the component as in the [../.tekton](../.tekton/) dir
-- `./deploy-via-argocd.sh` to install an argocd Application
-- `./deploy.sh` to deploy directly from this directory without using ArgoCD
+- Ensure OpenShift GitOps has been installed in the cluster, then run `./deploy-via-argocd.sh`.
+- To rebuild the container image on pushes, wire up Tekton Pipelines as Code
+  (PAC). PAC will use the contents of the [.tekton](../.tekton/) directory as
+  described in [Authoring PipelineRuns](https://pipelinesascode.com/docs/guide/authoringprs/).
+
+### Alternatives:
+
+- `./deploy.sh` deploys once from this directory without using ArgoCD
+- `./deploy-via-acm-argocd.sh` deploys an ApplicationSet designed to work with
+  ACM. ACM and ArgoCD must be installed and a `GitOpsServer` resource declared
+  binding them.
+
+## Additional required configuration
 
 For now the following configuration must be set up manually in the app's namespace (default: `spring-apiserver`).
 

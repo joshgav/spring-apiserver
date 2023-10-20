@@ -79,3 +79,14 @@ function ensure_helm_repo {
     fi
     helm repo add --force-update "${name}" "${url}"
 }
+
+function ensure_argocd {
+    local argocd_namespace=${1:-openshift-gitops}
+    local argocd_deployment_name=${2:-openshift-gitops-server}
+
+    kubectl get deployments -n ${argocd_namespace} ${argocd_deployment_name} &> /dev/null
+    if [[ $? != 0 ]]; then
+        echo "ERROR: ArgoCD is not installed, cannot deploy Argo app"
+        return 2
+    fi
+}
