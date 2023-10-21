@@ -1,7 +1,8 @@
 #! /usr/bin/env bash
 root_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 app_name=${1:-apiserver}
-export PATH=/usr/lib/postgresql/12/bin:${PATH}
+
+if ! which pg_ctl > /dev/null; then echo "ERROR: please install postgres"; exit 1; fi
 
 # helpful manual commands
 # stop server: `pg_ctl stop -D temp/pgsql/data`
