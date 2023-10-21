@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi9/openjdk-17:latest
+FROM registry.access.redhat.com/ubi9/openjdk-17:latest
 
 USER 0
 WORKDIR /app-root
