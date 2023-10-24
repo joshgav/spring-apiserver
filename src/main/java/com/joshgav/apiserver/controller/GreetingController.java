@@ -31,7 +31,7 @@ public class GreetingController {
 
         StringBuilder page = new StringBuilder();
 
-        page.append("Hello world!");
+        page.append("Hello Summit Connect!");
         
         return ResponseEntity.ok(page.toString());
 
