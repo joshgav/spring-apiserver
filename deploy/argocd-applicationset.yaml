@@ -17,7 +17,7 @@ spec:
     spec:
       project: default
       source:
-        path: deploy/base
+        path: deploy/openshift
         repoURL: https://github.com/joshgav/spring-apiserver.git
         targetRevision: main
       destination:

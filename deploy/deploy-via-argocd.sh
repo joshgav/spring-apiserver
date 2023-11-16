@@ -11,4 +11,6 @@ app_namespace=spring-apiserver
 ensure_argocd ${argocd_namespace}
 ensure_namespace ${app_namespace}
 
+${this_dir}/create-config.sh ${app_namespace}
+
 kubectl apply -n ${argocd_namespace} -f ${this_dir}/argocd-application.yaml

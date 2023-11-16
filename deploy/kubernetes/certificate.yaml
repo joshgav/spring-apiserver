@@ -1,0 +1,22 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: spring-apiserver
+  namespace: spring-apiserver
+spec:
+  secretName: spring-apiserver-keypair
+  commonName: spring-apiserver.cluster1.joshgav.com
+  isCA: true
+  dnsNames:
+  - spring-apiserver.cluster1.joshgav.com
+  subject:
+    organizationalUnits:
+    - kubernetes
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: ca
+    kind: ClusterIssuer
+    group: cert-manager.io

@@ -2,6 +2,16 @@
 
 ## Helper functions to be imported in scripts.
 
+# is_openshift returns 0 if cluster appears to be OpenShift
+function is_openshift() {
+    set +e
+    kubectl get namespaces openshift-operators &> /dev/null
+    if [[ $? != 0 ]]; then
+        return 1
+    fi
+    return 0
+}
+
 function await_resource_ready {
     local resource_name=${1}
 
