@@ -14,12 +14,12 @@ spec:
   serviceAccountName: pipeline
   params:
   - name: source-repo
-    value: {{repo_url}}
+    value: "{{repo_url}}"
   - name: source-branch
-    value: {{source_branch}}
+    value: "{{source_branch}}"
   - name: output-image
-    value: quay.io/{{repo_owner}}/{{repo_name}}:latest
-    # value: registry-quay-quay.apps.ipi.aws.joshgav.com/{{repo_owner}}/{{repo_name}}:latest
+    value: "quay.io/{{repo_owner}}/{{repo_name}}:latest"
+    # value: "registry-quay-quay.apps.ipi.aws.joshgav.com/{{repo_owner}}/{{repo_name}}:latest"
   workspaces:
   - name: source-folder
     volumeClaimTemplate:
@@ -91,6 +91,6 @@ spec:
       - configure-application
       params:
       - name: application-name
-        value: {{repo_name}}
+        value: "{{repo_name}}"
       - name: revision
         value: $(params.source-branch)
