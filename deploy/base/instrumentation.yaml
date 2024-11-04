@@ -4,7 +4,7 @@ metadata:
   name: instrumentation
 spec:
   exporter:
-    endpoint: 'http://cluster-opentelemetry-collector-headless.tracing-system.svc:4317'
+    endpoint: 'http://collector-collector.opentelemetry-collector.svc:4317'
   java:
     env:
       - name: OTEL_METRICS_EXPORTER
