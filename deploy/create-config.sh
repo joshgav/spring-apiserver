@@ -13,7 +13,7 @@ ensure_namespace ${app_namespace} true
 oc get secret quay-pull-secret &> /dev/null
 if [[ $? == 0 ]]; then oc delete secret quay-pull-secret; fi
 oc create secret docker-registry quay-pull-secret --namespace=${app_namespace} \
-    --docker-server="quay.io" \
+    --docker-server="${QUAY_HOSTNAME}" \
     --docker-username="${QUAY_USERNAME}" \
     --docker-password="${QUAY_PASSWORD}"
 
