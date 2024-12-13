@@ -14,12 +14,12 @@ spec:
   serviceAccountName: pipeline
   params:
   - name: source-repo
-    value: "{{repo_url}}"
+    value: "{{ repo_url }}"
   - name: source-branch
-    value: "{{source_branch}}"
+    value: "{{ source_branch }}"
   - name: output-image
-    # value: "registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:pr-{{pull_request_number}}"
-    value: "quay.io/joshgav/spring-apiserver:pr-{{pull_request_number}}"
+    # value: "registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:pr-{{ pull_request_number }}"
+    value: "quay.io/joshgav/spring-apiserver:pr-{{ pull_request_number }}"
   workspaces:
   - name: source-folder
     volumeClaimTemplate:
@@ -43,13 +43,19 @@ spec:
     tasks:
     - name: clone-repo
       params:
-      - name: url
+      - name: URL
         value: $(params.source-repo)
-      - name: revision
+      - name: REVISION
         value: $(params.source-branch)
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        resolver: cluster
+        params:
+        - name: name
+          value: git-clone
+        - name: namespace
+          value: openshift-pipelines
+        - name: kind
+          value: task
       workspaces:
       - name: output
         workspace: source-folder
@@ -60,8 +66,14 @@ spec:
       runAfter:
       - clone-repo
       taskRef:
-        kind: ClusterTask
-        name: buildah
+        resolver: cluster
+        params:
+        - name: name
+          value: buildah
+        - name: namespace
+          value: openshift-pipelines
+        - name: kind
+          value: task
       workspaces:
       - name: source
         workspace: source-folder

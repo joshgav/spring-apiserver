@@ -14,13 +14,13 @@ spec:
   serviceAccountName: pipeline
   params:
   - name: source-repo
-    value: "{{repo_url}}"
+    value: "{{ repo_url }}"
   - name: source-branch
-    value: "{{source_branch}}"
+    value: "{{ source_branch }}"
   - name: output-image
-    value: "quay.aws.joshgav.com/{{repo_owner}}/{{repo_name}}:latest"
-    # value: "quay.io/{{repo_owner}}/{{repo_name}}:latest"
-    # value: "registry-quay-quay.apps.ipi.aws.joshgav.com/{{repo_owner}}/{{repo_name}}:latest"
+    value: "quay.aws.joshgav.com/{{ repo_owner }}/{{ repo_name }}:latest"
+    # value: "quay.io/{{ repo_owner }}/{{ repo_name }}:latest"
+    # value: "registry-quay-quay.apps.ipi.aws.joshgav.com/{{ repo_owner }}/{{ repo_name }}:latest"
   workspaces:
   - name: source-folder
     volumeClaimTemplate:
@@ -46,25 +46,37 @@ spec:
     tasks:
     - name: clone-repo
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        resolver: cluster
+        params:
+        - name: name
+          value: git-clone
+        - name: namespace
+          value: openshift-pipelines
+        - name: kind
+          value: task
       params:
-      - name: url
-        value: $(params.source-repo)
-      - name: revision
-        value: $(params.source-branch)
+      - name: URL
+        value: "$(params.source-repo)"
+      - name: REVISION
+        value: "$(params.source-branch)"
       workspaces:
       - name: output
         workspace: source-folder
     - name: build-image
       taskRef:
-        kind: ClusterTask
-        name: buildah
+        resolver: cluster
+        params:
+        - name: name
+          value: buildah
+        - name: namespace
+          value: openshift-pipelines
+        - name: kind
+          value: task
       runAfter:
       - clone-repo
       params:
       - name: IMAGE
-        value: $(params.output-image)
+        value: "$(params.output-image)"
       workspaces:
       - name: source
         workspace: source-folder
@@ -72,8 +84,14 @@ spec:
     ## - name: test-application
     - name: configure-application
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+        resolver: cluster
+        params:
+        - name: name
+          value: openshift-client
+        - name: namespace
+          value: openshift-pipelines
+        - name: kind
+          value: task
       runAfter:
       - build-image
       workspaces:
@@ -83,15 +101,21 @@ spec:
       - name: SCRIPT
         value: |
           oc apply -n openshift-gitops -f deploy/argocd-application.yaml
-          oc patch -n openshift-gitops application.argoproj.io {{repo_name}} --type merge -p '{"spec": {"source": {"targetRevision": "$(params.source-branch)"} } }'
+          oc patch -n openshift-gitops application.argoproj.io {{ repo_name }} --type merge -p '{"spec": {"source": {"targetRevision": "$(params.source-branch)"} } }'
     - name: sync-application
       taskRef:
-        kind: ClusterTask
-        name: argocd-task-sync-and-wait
+        resolver: cluster
+        params:
+        - name: name
+          value: argocd-task-sync-and-wait
+        - name: namespace
+          value: openshift-pipelines
+        - name: kind
+          value: task
       runAfter:
       - configure-application
       params:
       - name: application-name
-        value: "{{repo_name}}"
+        value: "{{ repo_name }}"
       - name: revision
-        value: $(params.source-branch)
+        value: "$(params.source-branch)"
