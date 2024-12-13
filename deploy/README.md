@@ -6,6 +6,9 @@
 - To rebuild the container image on pushes, wire up Tekton Pipelines as Code
   (PAC). PAC will use the contents of the [.tekton](../.tekton/) directory as
   described in [Authoring PipelineRuns](https://pipelinesascode.com/docs/guide/authoringprs/).
+- Install extra tasks in Pipelines:
+  - https://hub.tekton.dev/tekton/task/openshift-client
+  - https://hub.tekton.dev/tekton/task/argocd-task-sync-and-wait
 
 ### Alternatives:
 
