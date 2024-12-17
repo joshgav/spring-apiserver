@@ -11,9 +11,9 @@ metadata:
     # this label also determines which Tekton pipeline runs are discovered 
     backstage.io/kubernetes-label-selector: app=spring-apiserver
     backstage.io/techdocs-ref: dir:.
-    argocd/app-name: spring-apiserver
+    argocd/app-selector: app=spring-apiserver
     quay.io/repository-slug: joshgav/spring-apiserver
-    janus-idp.io/tekton-enabled: 'true'
+    tekton.dev/cicd: "true"
     github.com/project-slug: joshgav/spring-apiserver
   links:
     - url: https://blog.joshgav.com/

@@ -5,6 +5,8 @@ metadata:
   name: spring-apiserver
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+  labels:
+    app: spring-apiserver
 spec:
   destination:
     namespace: spring-apiserver
