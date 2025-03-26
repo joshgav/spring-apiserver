@@ -95,7 +95,7 @@ spec:
       runAfter:
       - build-image
       workspaces:
-      - name: manifest-dir
+      - name: manifest_dir
         workspace: source-folder
       params:
       - name: SCRIPT
