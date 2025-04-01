@@ -6,7 +6,7 @@ metadata:
   annotations:
     pipelinesascode.tekton.dev/on-target-branch: "[main,tekton]"
     pipelinesascode.tekton.dev/on-event: "pull_request"
-    pipelinesascode.tekton.dev/task: "[git-clone,buildah]"
+    pipelinesascode.tekton.dev/task: "[git-clone,buildah,openshift-client,argocd-task-sync-and-wait]"
     pipelinesascode.tekton.dev/max-keep-runs: "5"
   labels:
     app: spring-apiserver
@@ -18,14 +18,15 @@ spec:
   - name: source-branch
     value: "{{ source_branch }}"
   - name: output-image
-    value: "registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:pr-{{ pull_request_number }}"
+    value: "quay.aws.joshgav.com/joshgav/spring-apiserver:pr-{{ pull_request_number }}"
+    # value: "registry-quay-quay.apps.ipi.aws.joshgav.com/joshgav/spring-apiserver:pr-{{ pull_request_number }}"
     # value: "quay.io/joshgav/spring-apiserver:pr-{{ pull_request_number }}"
   workspaces:
   - name: source-folder
     volumeClaimTemplate:
       spec:
         accessModes:
-        - ReadWriteOnce
+          - ReadWriteOnce
         resources:
           requests:
             storage: 1Gi
@@ -40,13 +41,10 @@ spec:
     - name: output-image
       description: reference of the image that will get created
       type: string
+    workspaces:
+    - name: source-folder
     tasks:
     - name: clone-repo
-      params:
-      - name: URL
-        value: $(params.source-repo)
-      - name: REVISION
-        value: $(params.source-branch)
       taskRef:
         resolver: cluster
         params:
@@ -56,15 +54,15 @@ spec:
           value: openshift-pipelines
         - name: kind
           value: task
+      params:
+      - name: URL
+        value: "$(params.source-repo)"
+      - name: REVISION
+        value: "$(params.source-branch)"
       workspaces:
       - name: output
         workspace: source-folder
     - name: build-image
-      params:
-      - name: IMAGE
-        value: $(params.output-image)
-      runAfter:
-      - clone-repo
       taskRef:
         resolver: cluster
         params:
@@ -74,8 +72,11 @@ spec:
           value: openshift-pipelines
         - name: kind
           value: task
+      runAfter:
+      - clone-repo
+      params:
+      - name: IMAGE
+        value: "$(params.output-image)"
       workspaces:
       - name: source
         workspace: source-folder
-    workspaces:
-    - name: source-folder

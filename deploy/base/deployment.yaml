@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: spring-apiserver
-          image: quay.io/joshgav/spring-apiserver:latest
+          image: quay.aws.joshgav.com/joshgav/spring-apiserver:latest
           imagePullPolicy: Always
           envFrom:
             - prefix: PG_

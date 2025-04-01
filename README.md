@@ -11,6 +11,6 @@ A basic Spring Web API server over a PostgresQL DB for tests and experiments.
     - logout and back in
 - run `./deploy/run-local-db.sh`
     - check logs for errors and fix them
-    - you may need to `chmod -R 0775 /var/run/postgresql`
+    - you may need to `chmod -R 0775 /var/run/postgresql` to enable access to the file lock
 - set password in [`src/main/resources/application.yaml`](./src/main/resources/application.yaml) to match password in `./temp/pgsql/pwfile`
 - run `./gradlew bootRun`

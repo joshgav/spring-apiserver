@@ -8,4 +8,4 @@ resources:
 - cm.yaml
 # - instrumentation.yaml
 - deployment.yaml
-# - servicemonitor.yaml
+- servicemonitor.yaml

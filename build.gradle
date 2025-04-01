@@ -6,23 +6,23 @@ plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
 }
 
-group 'com.joshgav'
-version '1.0.0-SNAPSHOT'
+group = 'com.joshgav'
+version = '1.0.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = 17
-    targetCompatibility = 17
+    sourceCompatibility = 21
+    targetCompatibility = 21
 }
 
 repositories {
     maven {
-        url "https://repo.spring.io/milestone"
+        url = "https://repo.spring.io/milestone"
     }
     maven {
-        url "https://repo.spring.io/snapshot"
+        url = "https://repo.spring.io/snapshot"
     }
     maven {
-        url "https://repo.spring.io/release"
+        url = "https://repo.spring.io/release"
     }
     mavenLocal()
     mavenCentral()
@@ -58,7 +58,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
