@@ -15,15 +15,6 @@ java {
 }
 
 repositories {
-    maven {
-        url = "https://repo.spring.io/milestone"
-    }
-    maven {
-        url = "https://repo.spring.io/snapshot"
-    }
-    maven {
-        url = "https://repo.spring.io/release"
-    }
     mavenLocal()
     mavenCentral()
 }
@@ -58,12 +49,13 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    testImplementation('org.springframework.boot:spring-boot-resttestclient')
 
     testImplementation "io.zonky.test:embedded-database-spring-test:${zonkyVersion}"
     testImplementation "io.zonky.test:embedded-postgres:${zonkyPostgresVersion}"
