@@ -4,7 +4,6 @@
             <pattern>%date{yyyy-MM-dd'T'HH:mm:ss.SSSZ} [%X{traceId}:%X{spanId}] %-5level %logger{35} - %msg %n</pattern>
         </encoder>
     </appender>
-    <logger name="com.joshgav" level="TRACE"/>
     <root level="DEBUG">
         <appender-ref ref="stdout"/>
     </root>

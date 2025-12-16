@@ -10,11 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-// import org.springframework.security.core.context.SecurityContextHolder;
-// import org.keycloak.KeycloakPrincipal;
-// import org.keycloak.KeycloakSecurityContext;
-// import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-// import org.keycloak.representations.IDToken;
 
 @RestController
 @RequestMapping(value={"/greeting", "/"})
@@ -31,19 +26,8 @@ public class GreetingController {
 
         StringBuilder page = new StringBuilder();
 
-        page.append("Hello Summit Connect!");
+        page.append("Hello world!");
         
         return ResponseEntity.ok(page.toString());
-
-        // TODO: enable Keycloak SSO
-        // KeycloakSecurityContext context = (KeycloakSecurityContext) req.getAttribute(KeycloakSecurityContext.class.getName());
-        // IDToken idToken = context.getIdToken();
-
-        // String preferredUsername = idToken.getPreferredUsername();
-        // String issuer = idToken.getIssuer();
-        // String subject = idToken.getSubject();
-       
-        // String content = String.format("Hello %s!\nID token issued by: %s\nto subject: %s", preferredUsername, issuer, subject);
-        // return ResponseEntity.ok(content);
     }
 }

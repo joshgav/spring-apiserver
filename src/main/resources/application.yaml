@@ -34,3 +34,10 @@ springdoc:
   api-docs.enabled: true
   swagger-ui.enabled: true
   packagesToScan: com.joshgav.apiserver.controller
+
+logging:
+  level:
+    root: INFO
+    com.joshgav.apiserver: DEBUG
+    org.springframework: INFO
+    org.hibernate: WARN
