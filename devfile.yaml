@@ -4,7 +4,7 @@ metadata:
 components:
   - name: tools
     container:
-      image: quay.io/devfile/universal-developer-image:ubi8-latest
+      image: quay.io/devfile/universal-developer-image:ubi10-latest
       memoryLimit: 4Gi
       mountSources: true
       endpoints:
@@ -27,7 +27,7 @@ components:
       image: docker.io/library/postgres:latest
       memoryLimit: 1Gi
       endpoints:
-        - exposure: none
+        - exposure: internal
           name: db
           protocol: tcp
           targetPort: 5432
