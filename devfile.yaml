@@ -1,4 +1,4 @@
-schemaVersion: 2.1.0
+schemaVersion: 2.3.0
 metadata:
   generateName: spring-apiserver-
 components:
@@ -19,6 +19,8 @@ components:
       env:
         - name: DEBUG_PORT
           value: "5858"
+        - name: VSCODE_DEFAULT_WORKSPACE
+          value: "/projects/spring-apiserver/hosted.code-workspace"
   - name: m2
     volume:
       size: 3Gi

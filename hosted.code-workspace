@@ -1,0 +1,20 @@
+{
+    "folders": [
+        {
+            "name": "spring-apiserver",
+            "path": "/projects/spring-apiserver"
+        },
+        {
+            "name": "user-home",
+            "path": "../../home/user"
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "vscjava.vscode-java-debug",
+            "redhat.vscode-yaml",
+            "redhat.java",
+            "cnshenj.vscode-task-manager"
+        ]
+    }
+}
