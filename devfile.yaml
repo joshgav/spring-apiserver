@@ -1,6 +1,6 @@
 schemaVersion: 2.3.0
 metadata:
-  generateName: spring-apiserver-
+  generateName: spring-apiserver
 components:
   - name: tools
     container:
@@ -21,6 +21,8 @@ components:
           value: "5858"
         - name: VSCODE_DEFAULT_WORKSPACE
           value: "/projects/spring-apiserver/hosted.code-workspace"
+        - name: HOME
+          value: /projects
   - name: m2
     volume:
       size: 3Gi
@@ -48,6 +50,26 @@ components:
   - name: pgsqldata
     volume:
       size: 1Gi
+  - name: prep-tools
+    container:
+      image: quay.io/devfile/universal-developer-image:ubi10-latest
+      mountSources: true
+      sourceMapping: /projects
+      command:
+      - /bin/bash
+      - '-c'
+      args:
+      - |
+          mkdir -p ${HOME}/.bin && \
+          curl -sSL -o ${HOME}/.bin/odo https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/odo/v3.16.1/odo-linux-amd64 && \
+          chmod +x ${HOME}/.bin/odo
+
+          if [[ ! -f ${HOME}/.bashrc ]]; then
+            echo 'export PATH="${HOME}/.bin:${PATH}"' > ${HOME}/.bashrc
+          fi
+      env:
+      - name: HOME
+        value: /projects
 commands:
   - id: build
     exec:
@@ -73,3 +95,10 @@ commands:
       group:
         kind: debug
         isDefault: true
+  - id: prep-tools
+    apply:
+      component: prep-tools
+      label: prep-tools
+events:
+  preStart:
+  - prep-tools
