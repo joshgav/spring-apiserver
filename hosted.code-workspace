@@ -14,7 +14,11 @@
             "vscjava.vscode-java-debug",
             "redhat.vscode-yaml",
             "redhat.java",
-            "cnshenj.vscode-task-manager"
+            "cnshenj.vscode-task-manager",
+            "vscjava.vscode-gradle"
         ]
+    },
+    "settings": {
+        "java.server.launchMode": "Standard",
     }
 }
